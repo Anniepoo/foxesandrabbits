@@ -20,3 +20,4 @@
 :- initialization(
 	logtalk_load([fox, rabbit, field])
 ).
+
