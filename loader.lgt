@@ -21,4 +21,4 @@
 
 init :-
 	writeln('loading it all up'),
-	logtalk_load([library(random_loader), fox, bunny, field, shiva_dance]).
+	logtalk_load([library(random_loader), shiva_dance, fox, bunny, field]).
