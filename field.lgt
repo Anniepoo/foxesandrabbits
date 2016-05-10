@@ -21,6 +21,8 @@
 % though I'm cheaping out on the real singleton pattern
 
 :- object(field,
+  instantiates(class),
+  specializes(object),
    implements(monitoring)).
   :- uses(bunny, [new/1]).
   :- uses(fox, [new/1]).
@@ -33,6 +35,11 @@
        comment is 'A field where the bunnies and foxes can live happily together'
    ]).
    :- initialization(init).
+
+  :- public(grow_grass/0).
+  :- info(grow_grass/0, [
+    comment is 'Makes the grass get longer'
+  ]).
 
    :- dynamic wabbit/3,fox/3.
 
@@ -86,7 +93,6 @@
       ::map_field(reset_grass).
 
   % randomly grow some grass
-  :- public(grow_grass/0).
   grow_grass :-
       ::map_field(grow_grass).
 

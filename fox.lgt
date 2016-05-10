@@ -1,4 +1,4 @@
-:- object(bunny,
+:- object(fox,
   instantiates(class),
   specializes(object),
    implements(monitoring)).
