@@ -9,6 +9,16 @@
    		argnames is ['Id']
    	]).
 
+   	:- public(live/0).
+   	:- info(live/0, [
+   		comment is 'Mr. Fox, do your thing for a cycle.'
+   	]).
+
+   	:- public(die/0).
+   	:- info(die/0, [
+   		comment is 'fox responds by dying.'
+   	]).
+
    	new(Fox) :-
    		self(Self),
    		create_object(Fox, [extends(Self)], [], []).
@@ -16,5 +26,17 @@
     :- private(hunger/1).
     :- dynamic(hunger/1).
     hunger(0).
+
+    live :-
+      self(Self),
+      write('Fox '),
+      write(Self),
+      writeln(' lives').
+
+    die :-
+      self(Self),
+      write('Fox '),
+      write(Self),
+      writeln(' dies').
 
 :- end_object.

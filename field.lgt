@@ -42,12 +42,24 @@
      comment is 'Displays the field using ascii graphics'
    ]).
 
+    :- public(with_bunnies/1).
+    :- info(with_bunnies/1, [
+      comment is 'Send a message to all bunnies'
+    ]).
+
+    :- public(with_foxes/1).
+    :- info(with_foxes/1, [
+      comment is 'Send a message to all foxes'
+    ]).
+
    :- private(wabbit/3).
    :- private(fox/3).
    :- private(grass/3).
    :- dynamic([wabbit/3,fox/3,grass/3]).
 
    init :-
+     self(Self),
+     after_event_registry::del_monitors(_, die, _, Self),
      reset_grass,
      forall(wabbit(Name, _, _), Name::die),
      forall(fox(Name, _, _), Name::die),
@@ -55,6 +67,8 @@
      retractall(fox(_,_,_)),
      bestrew_wabbits,
      bestrew_foxes,
+     % only now do we listen for events
+     after_event_registry::set_monitor(_, die, _, Self),
      shiva_dance::start.
 
 % one less than the size of the field
@@ -92,6 +106,39 @@
      fail.
    map_field(_).
 
+   with_foxes(Goal) :-
+     fox(ID, _, _),
+     once(ID::Goal),
+     fail.
+   with_foxes(_).
+
+   with_bunnies(Goal) :-
+     wabbit(ID, _, _),
+     once(ID::Goal),
+     fail.
+   with_bunnies(_).
+
+   after(Animal, die, _) :-
+     fox(Animal, _, _),
+     write('Fox named'),
+     write(Animal),
+     writeln(' died'),
+     retractall(fox(Animal, _, _)).
+   after(Animal, die, _) :-
+     wabbit(Animal, _, _),
+     write('Bunny named'),
+     write(Animal),
+     writeln(' died'),
+     retractall(wabbit(Animal, _, _)).
+   after(Object, Message, Sender) :-
+     write('hey strange message: '),
+     write(Sender),
+     write(' --> '),
+     write(Message),
+     write(' --> '),
+     writeln(Object).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  Grass %%%%%%%%%%%%%%%%%%%%%%%%%%%%
    reset_grass :-
       retractall(grass(_,_,_)),
       map_field(reset_grass).

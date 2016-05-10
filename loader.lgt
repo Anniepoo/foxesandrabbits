@@ -21,4 +21,8 @@
 
 init :-
 	writeln('loading it all up'),
+	logtalk_load(library(basic_types_loader)),
+logtalk_load(library(metapredicates_loader)),
+logtalk_load(roots(loader)),
+logtalk_load(relations(loader)),
 	logtalk_load([library(random_loader), shiva_dance, fox, bunny, field]).
