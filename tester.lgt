@@ -20,6 +20,8 @@
 
 :- initialization((
 	set_logtalk_flag(report, warnings),
+  set_logtalk_flag(debug, on),
+  set_logtalk_flag(source_data, on),
 	logtalk_load(lgtunit(loader)),
 	logtalk_load(loader),
 	logtalk_load(tests, [hook(lgtunit)]),

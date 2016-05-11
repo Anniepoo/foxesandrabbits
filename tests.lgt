@@ -35,4 +35,6 @@
   test(field_1) :-
     field::reset_world.
 
+  cover(field).
+  
 :- end_object.
