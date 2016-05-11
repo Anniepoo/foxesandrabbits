@@ -55,17 +55,34 @@
     ]).
 
     :- public(sniff_fox/2).
-    :- mode(sniff_fox_(+object_identifier, -atom), zero_or_more).
+    :- mode(sniff_fox(+object_identifier, -atom), zero_or_more).
     :- info(sniff_fox/2, [
       comment is 'true if Name is a bunny ID and Direction is a direction in which there is an adjacent fox',
       argnames is ['Name', 'Direction']
     ]).
 
+    :- public(eat_grass/2).
+    :- mode(eat_grass(+object_identifier, -number), zero_or_one).
+    :- info(eat_grass/2, [
+      comment is 'true if Name is a bunny ID and Food is an amount of food eaten.\c
+       Side effect of decreasing available grass. Bunny takes care of impact on its own hunger level. Fails if cant eat here',
+      argnames is ['Name', 'Food']
+    ]).
+
     :- public(move_away_from/2).
-    :- mode(move_away_from(+object_identifier, -atom), one).
+    :- mode(move_away_from(+object_identifier, +atom), zero_or_one).
     :- info(move_away_from/2, [
-      comment is 'true if Name is an animal ID and Direction is a direction away from which the animal can and does move. Side effect, the animal moves',
-      argnames is ['Name', 'Direction']
+      comment is 'true if Name is an animal ID and Direction is a direction away from which the animal can and does\c
+       move. Side effect, the animal moves. fails if impossible',
+      argnames is ['Direction', 'Name']
+    ]).
+
+    :- public(move/2).
+    :- mode(move(+object_identifier, +atom), zero_or_one).
+    :- info(move_away_from/2, [
+      comment is 'true if Name is an animal ID and Direction is a direction towards which the animal can and does\c
+       move. Side effect, the animal moves. fails if impssible ',
+      argnames is ['Direction', 'Name']
     ]).
 
     :- public(reset_world/0).
@@ -144,7 +161,6 @@
      fail.
    with_bunnies(_).
 
-
    %%%%%%%%%%%%%%%%%%%%%%%%%  Respond to events %%%%%%%%%%%%%%%%%%%%%
 
    after(Animal, die, _) :-
@@ -187,36 +203,36 @@
     fox_(_, X, FY).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Act on environment %%%%%%%%%%%%%%%%
-  move_away_from(Name, left) :-
-    move(Name, right).
-  move_away_from(Name, right) :-
-    move(Name, left).
-  move_away_from(Name, up) :-
-    move(Name, down).
-  move_away_from(Name, down) :-
-    move(Name, up).
+  move_away_from(left, Name) :-
+    move(right, Name).
+  move_away_from(right, Name) :-
+    move(left, Name).
+  move_away_from(up, Name) :-
+    move(down, Name).
+  move_away_from(down, Name) :-
+    move(up, Name).
 
 % TODO need to refactor into a base class of animal.
-  move(Name, left) :-
+  move(left, Name) :-
     wabbit_(Name, X, Y),
     X > 0,
     NX is X - 1,
     ::retractall(wabbit_(Name, _, _)),
     ::asserta(wabbit_(Name, NX, Y)).
-  move(Name, right) :-
+  move(right, Name) :-
     wabbit_(Name, X, Y),
     field_size(N),
     X < N,
     NX is X + 1,
     ::retractall(wabbit_(Name, _, _)),
     ::asserta(wabbit_(Name, NX, Y)).
-  move(Name, up) :-
+  move(up, Name) :-
     wabbit_(Name, X, Y),
     Y > 0,
     NY is Y - 1,
     ::retractall(wabbit_(Name, _, _)),
     ::asserta(wabbit_(Name, X, NY)).
-  move(Name, down) :-
+  move(down, Name) :-
     wabbit_(Name, X, Y),
     field_size(N),
     Y < N,
@@ -224,26 +240,8 @@
     ::retractall(wabbit_(Name, _, _)),
     ::asserta(wabbit_(Name, X, NY)).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  Grass %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-   reset_grass :-
-      retractall(grass_(_,_,_)),
-      map_field(reset_grass).
 
-  reset_grass(X, Y) :-
-      asserta(grass_(X, Y, 9)).
-
-  % randomly grow some grass
-
-  grow_grass :-
-      field_size(S),
-      random(0, S, X),
-      random(0, S, Y),
-      grass_(X, Y, Height),
-      NewHeight is Height + 1,
-      retractall(grass_(X, Y, _)),
-      asserta(grass_(X, Y, NewHeight)),
-      fail.
-  grow_grass.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  display field %%%%%%%%%%%%%%%%%%%%%
 
   print_field :-
     field_size(S),
@@ -276,14 +274,56 @@
       grass_symbol(Height, Symbol),
       write(Symbol).
 
-  grass_symbol(X, 'WWWW ') :- X >= 9.
-  grass_symbol(8, 'WwWW ').
-  grass_symbol(7, 'WwWw ').
-  grass_symbol(6, 'wwWw ').
-  grass_symbol(5, 'wwww ').
-  grass_symbol(4, 'w_ww ').
-  grass_symbol(3, 'w_w_ ').
-  grass_symbol(2, 'w___ ').
-  grass_symbol(1, '__w_ ').
-  grass_symbol(_, '____ ').
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  Grass %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  reset_grass :-
+      retractall(grass_(_,_,_)),
+      map_field(reset_grass).
+
+  reset_grass(X, Y) :-
+      asserta(grass_(X, Y, 9)).
+
+  % randomly grow some grass
+
+  grow_grass :-
+      field_size(S),
+      random(0, S, X),
+      random(0, S, Y),
+      grass_(X, Y, Height),
+      NewHeight is Height + 1,
+      retractall(grass_(X, Y, _)),
+      asserta(grass_(X, Y, NewHeight)),
+      fail.
+  grow_grass.
+
+  grass_symbol(Height, Symbol) :-
+         (    Height >= 9 ->
+             grass_symbol_table(9, Symbol)
+          ;    Height < 0 ->
+              grass_symbol_table(0, Symbol)
+         ;    grass_symbol_table(Height, Symbol)
+         ).
+
+  grass_symbol_table(9, 'WWWW ').
+  grass_symbol_table(8, 'WwWW ').
+  grass_symbol_table(7, 'WwWw ').
+  grass_symbol_table(6, 'wwWw ').
+  grass_symbol_table(5, 'wwww ').
+  grass_symbol_table(4, 'w_ww ').
+  grass_symbol_table(3, 'w_w_ ').
+  grass_symbol_table(2, 'w___ ').
+  grass_symbol_table(1, '__w_ ').
+  grass_symbol_table(0, '____ ').
+
+  % message that a bunny is eating grass. We modify the grass value but the
+  % bunny takes care of it's self
+  eat_grass(Bunny, Nutrition) :-
+    wabbit_(Bunny, X, Y),
+    grass_(X, Y, Avail),
+    Avail > 2,
+    ::retractall(grass_(X, Y, _)),
+    % rabbit eats half the grass but never more than 6
+    Nutrition is max(6, Avail // 2),
+    NA is max(0, Avail - Nutrition),
+    ::asserta(grass_(X, Y, NA)).
+
 :- end_object.

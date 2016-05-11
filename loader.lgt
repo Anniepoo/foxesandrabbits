@@ -25,4 +25,4 @@ init :-
 logtalk_load(library(metapredicates_loader)),
 logtalk_load(roots(loader)),
 logtalk_load(relations(loader)),
-	logtalk_load([library(gensym), library(random_loader), shiva_dance, fox, bunny, field]).
+	logtalk_load([library(list), library(gensym), library(random_loader), shiva_dance, fox, bunny, field]).
