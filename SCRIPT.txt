@@ -1,0 +1,94 @@
+[debug]  ?- field::reset_world.
+Bunny o226 dies
+Bunny o225 dies
+Bunny o224 dies
+Bunny o223 dies
+Bunny o222 dies
+Fox o229 dies
+Fox o228 dies
+Fox o227 dies
+OK Shiva is dancing
+true.
+
+[debug]  ?- between(1,4,_),shiva_dance::tick,fail.
+Fox o241 lives
+Fox o240 lives
+Fox o239 lives
+Fox o238 lives
+Fox o237 lives
+Fox o236 lives
+Fox o235 lives
+Fox o234 lives
+Fox o233 lives
+Fox o232 lives
+Bunny has hunger 0
+Bunny hops away
+Bunny has hunger 0
+Bunny hops away
+Fox o241 lives
+Fox o240 lives
+Fox o239 lives
+Fox o238 lives
+Fox o237 lives
+Fox o236 lives
+Fox o235 lives
+Fox o234 lives
+Fox o233 lives
+Fox o232 lives
+Bunny has hunger 0
+Bunny o230 Plays
+Bunny has hunger 0
+Bunny o231 Plays
+Fox o241 lives
+Fox o240 lives
+Fox o239 lives
+Fox o238 lives
+Fox o237 lives
+Fox o236 lives
+Fox o235 lives
+Fox o234 lives
+Fox o233 lives
+Fox o232 lives
+Bunny has hunger 0
+Bunny o230 Plays
+Bunny has hunger 0
+Bunny o231 Plays
+Fox o241 lives
+Fox o240 lives
+Fox o239 lives
+Fox o238 lives
+Fox o237 lives
+Fox o236 lives
+Fox o235 lives
+Fox o234 lives
+Fox o233 lives
+Fox o232 lives
+Bunny has hunger 0
+Bunny o230 Plays
+Bunny has hunger 0
+Bunny o231 Plays
+false.
+
+Notice this is a bug - the bunnies aren't getting hungry.
+Obviously some simple misunderstanding of Logtalk, as the code on line 29 of bunny.lgt is pretty clear
+
+[debug]  ?- field::print_field.
+WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW
+WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW
+WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW
+WWWW WWWW  ^.^ WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW
+ ^.^  ^.^  ^.^ WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW
+WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW
+WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW  ^.^ WWWW >:c. WWWW WWWW WWWW WWWW
+WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW
+WWWW WWWW WWWW WWWW  ^.^ WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW
+WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW  ^.^ WWWW WWWW WWWW WWWW WWWW WWWW
+WWWW WWWW WWWW WWWW WWWW WWWW  ^.^ WWWW WWWW WWWW  ^.^ WWWW WWWW WWWW WWWW WWWW
+WWWW WWWW WWWW  ^.^ WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW
+WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW >:c. WWWW WWWW WWWW WWWW WWWW
+WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW
+WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW
+WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW
+true.
+
+[debug]  ?-
