@@ -17,16 +17,11 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-:- initialization(init).
 
-init :-
-	writeln('loading it all up'),
-	logtalk_load([
-		relations(loader),
-		library(list),
-		library(gensym),
-		library(random_loader),
-		shiva_dance,
-		fox,
-		bunny,
-		field]).
+:- initialization((
+	set_logtalk_flag(report, warnings),
+	logtalk_load(lgtunit(loader)),
+	logtalk_load(loader),
+	logtalk_load(tests, [hook(lgtunit)]),
+	tests::run
+)).

@@ -17,16 +17,22 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-:- initialization(init).
 
-init :-
-	writeln('loading it all up'),
-	logtalk_load([
-		relations(loader),
-		library(list),
-		library(gensym),
-		library(random_loader),
-		shiva_dance,
-		fox,
-		bunny,
-		field]).
+:- object(tests,
+	   extends(lgtunit)).
+
+	:- set_logtalk_flag(unknown_entities, silent).
+	:- set_logtalk_flag(events, allow).
+
+  :- info([
+    version is 0.1,
+    author is 'Anne Ogborn',
+    date is 2016/5/11,
+    comment is 'Unit tests for Foxes and Rabbits example'
+  ]).
+
+  % can we reset the world?
+  test(field_1) :-
+    field::reset_world.
+
+:- end_object.
