@@ -22,7 +22,9 @@
 
 :- object(field,
    implements(monitoring)).
-:- use_module(random_loader, [random/3]).
+:- uses(random, [random/3]).
+
+:- set_logtalk_flag(events, allow).
 
    :- info([
        version is 0.1,
@@ -52,24 +54,46 @@
       comment is 'Send a message to all foxes'
     ]).
 
-   :- private(wabbit/3).
-   :- private(fox/3).
-   :- private(grass/3).
-   :- dynamic([wabbit/3,fox/3,grass/3]).
+    :- public(sniff_fox/2).
+    :- mode(sniff_fox_(+object_identifier, -atom), zero_or_more).
+    :- info(sniff_fox/2, [
+      comment is 'true if Name is a bunny ID and Direction is a direction in which there is an adjacent fox',
+      argnames is ['Name', 'Direction']
+    ]).
+
+    :- public(move_away_from/2).
+    :- mode(move_away_from(+object_identifier, -atom), one).
+    :- info(move_away_from/2, [
+      comment is 'true if Name is an animal ID and Direction is a direction away from which the animal can and does move. Side effect, the animal moves',
+      argnames is ['Name', 'Direction']
+    ]).
+
+    :- public(reset_world/0).
+    :- info(reset_world/0, [
+      comment is 'reset the world to a new start state'
+    ]).
+
+   :- private([wabbit_/3, fox_/3, grass_/3]).
+   :- dynamic([wabbit_/3,fox_/3,grass_/3]).
+
+%%%%%%%%%%%%%%%%%%%%%%%%% init related %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
    init :-
      self(Self),
-     after_event_registry::del_monitors(_, die, _, Self),
+    abolish_events(after, _, die, _, Self),
      reset_grass,
-     forall(wabbit(Name, _, _), Name::die),
-     forall(fox(Name, _, _), Name::die),
-     retractall(wabbit(_,_,_)),
-     retractall(fox(_,_,_)),
+     forall(wabbit_(Name, _, _), Name::die),
+     forall(fox_(Name, _, _), Name::die),
+     retractall(wabbit_(_,_,_)),
+     retractall(fox_(_,_,_)),
      bestrew_wabbits,
      bestrew_foxes,
      % only now do we listen for events
-     after_event_registry::set_monitor(_, die, _, Self),
+     define_events(after, _, die, _, Self),
      shiva_dance::start.
+
+   reset_world :-
+     init.
 
 % one less than the size of the field
    field_size(15).
@@ -89,14 +113,16 @@
        random(0, S, X),
        random(0, S, Y),
        bunny::new(Name),
-       asserta(wabbit(Name, X, Y)).
+       asserta(wabbit_(Name, X, Y)).
 
    add_a_fox :-
       field_size(S),
        random(0, S, X),
        random(0, S, Y),
        fox::new(Name),
-       asserta(fox(Name, X, Y)).
+       asserta(fox_(Name, X, Y)).
+
+%%%%%%%%%%%%%%%%%%%%%%% convenience mapping operators %%%%%%%%%%%%%%%%%%%%%%%%%
 
    map_field(Goal) :-
      field_size(S),
@@ -107,29 +133,32 @@
    map_field(_).
 
    with_foxes(Goal) :-
-     fox(ID, _, _),
+     fox_(ID, _, _),
      once(ID::Goal),
      fail.
    with_foxes(_).
 
    with_bunnies(Goal) :-
-     wabbit(ID, _, _),
+     wabbit_(ID, _, _),
      once(ID::Goal),
      fail.
    with_bunnies(_).
 
+
+   %%%%%%%%%%%%%%%%%%%%%%%%%  Respond to events %%%%%%%%%%%%%%%%%%%%%
+
    after(Animal, die, _) :-
-     fox(Animal, _, _),
+     fox_(Animal, _, _),
      write('Fox named'),
      write(Animal),
      writeln(' died'),
-     retractall(fox(Animal, _, _)).
+     retractall(fox_(Animal, _, _)).
    after(Animal, die, _) :-
-     wabbit(Animal, _, _),
+     wabbit_(Animal, _, _),
      write('Bunny named'),
      write(Animal),
      writeln(' died'),
-     retractall(wabbit(Animal, _, _)).
+     retractall(wabbit_(Animal, _, _)).
    after(Object, Message, Sender) :-
      write('hey strange message: '),
      write(Sender),
@@ -138,26 +167,81 @@
      write(' --> '),
      writeln(Object).
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Environment sensing %%%%%%%%%%%%%%%%%%
+
+  sniff_fox(Bunny, left) :-
+    wabbit_(Bunny, X, Y),
+    FX is X - 1,
+    fox_(_, FX, Y).
+  sniff_fox(Bunny, right) :-
+    wabbit_(Bunny, X, Y),
+    FX is X + 1,
+    fox_(_, FX, Y).
+  sniff_fox(Bunny, up) :-
+    wabbit_(Bunny, X, Y),
+    FY is Y - 1,
+    fox_(_, X, FY).
+  sniff_fox(Bunny, down) :-
+    wabbit_(Bunny, X, Y),
+    FY is Y + 1,
+    fox_(_, X, FY).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Act on environment %%%%%%%%%%%%%%%%
+  move_away_from(Name, left) :-
+    move(Name, right).
+  move_away_from(Name, right) :-
+    move(Name, left).
+  move_away_from(Name, up) :-
+    move(Name, down).
+  move_away_from(Name, down) :-
+    move(Name, up).
+
+% TODO need to refactor into a base class of animal.
+  move(Name, left) :-
+    wabbit_(Name, X, Y),
+    X > 0,
+    NX is X - 1,
+    ::retractall(wabbit_(Name, _, _)),
+    ::asserta(wabbit_(Name, NX, Y)).
+  move(Name, right) :-
+    wabbit_(Name, X, Y),
+    field_size(N),
+    X < N,
+    NX is X + 1,
+    ::retractall(wabbit_(Name, _, _)),
+    ::asserta(wabbit_(Name, NX, Y)).
+  move(Name, up) :-
+    wabbit_(Name, X, Y),
+    Y > 0,
+    NY is Y - 1,
+    ::retractall(wabbit_(Name, _, _)),
+    ::asserta(wabbit_(Name, X, NY)).
+  move(Name, down) :-
+    wabbit_(Name, X, Y),
+    field_size(N),
+    Y < N,
+    NY is Y + 1,
+    ::retractall(wabbit_(Name, _, _)),
+    ::asserta(wabbit_(Name, X, NY)).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  Grass %%%%%%%%%%%%%%%%%%%%%%%%%%%%
    reset_grass :-
-      retractall(grass(_,_,_)),
+      retractall(grass_(_,_,_)),
       map_field(reset_grass).
 
   reset_grass(X, Y) :-
-      asserta(grass(X, Y, 9)).
+      asserta(grass_(X, Y, 9)).
 
   % randomly grow some grass
-  grow_grass :-
-      map_field(grow_grass).
 
   grow_grass :-
       field_size(S),
       random(0, S, X),
       random(0, S, Y),
-      grass(X, Y, Height),
+      grass_(X, Y, Height),
       NewHeight is Height + 1,
-      retractall(grass(X, Y, _)),
-      asserta(grass(X, Y, NewHeight)),
+      retractall(grass_(X, Y, _)),
+      asserta(grass_(X, Y, NewHeight)),
       fail.
   grow_grass.
 
@@ -178,17 +262,17 @@
 
   print_cell(X, Y) :- print_cell_(X, Y), !.
   print_cell_(X, Y) :-
-    fox(_, X,Y),
-    wabbit(_, X, Y),
+    fox_(_, X,Y),
+    wabbit_(_, X, Y),
     write('@#$! ').
     print_cell_(X, Y) :-
-      fox(_, X,Y),
+      fox_(_, X,Y),
       write(' ^.^ ').
     print_cell_(X, Y) :-
-      wabbit(_, X,Y),
+      wabbit_(_, X,Y),
       write('>:c. ').
     print_cell_(X, Y) :-
-      grass(X,Y, Height),
+      grass_(X,Y, Height),
       grass_symbol(Height, Symbol),
       write(Symbol).
 

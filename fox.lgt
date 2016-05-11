@@ -1,5 +1,4 @@
-:- object(fox,
-   implements(monitoring)).
+:- object(fox).
 
 
    	:- public(new/1).

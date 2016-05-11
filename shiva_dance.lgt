@@ -8,10 +8,7 @@
   :- public(tick/0).
   tick :-
     field::grow_grass,
-    field::with_bunnies(live),
-    field::with_foxes(live).
-
-  dance_bunnies :-
+    field::with_foxes(live),  % the foxes are quicker!
     field::with_bunnies(live).
 
 :- end_object.
