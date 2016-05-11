@@ -1,5 +1,5 @@
-:- object(fox).
-
+:- object(fox,
+   implements(animal)).
 
    	:- public(new/1).
    	:- mode(new(-object_identifier), one).
@@ -37,5 +37,9 @@
       write('Fox '),
       write(Self),
       writeln(' dies').
+
+  %%%%%%%%%%%%%%%%%%% animal protocol %%%%%%%%%%%%%%%%%%%%%%
+
+    species(fox).
 
 :- end_object.

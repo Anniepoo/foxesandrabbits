@@ -35,6 +35,17 @@
   test(field_1) :-
     field::reset_world.
 
+  % are bunnies bunnies?
+  test(bunny_1) :-
+    bunny::new(B),
+    B::species(bunny).
+
+  test(fox_1) :-
+    fox::new(F),
+    F::species(fox).
+
   cover(field).
-  
+  cover(bunny).
+  cover(fox).
+
 :- end_object.

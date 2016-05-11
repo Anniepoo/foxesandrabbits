@@ -26,6 +26,7 @@ init :-
 		library(list),
 		library(gensym),
 		library(random_loader),
+		animal,
 		shiva_dance,
 		fox,
 		bunny,

@@ -1,9 +1,37 @@
-:- object(bunny).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  This file is part of Logtalk <http://logtalk.org/>
+%  Copyright 1998-2016 Paulo Moura <pmoura@logtalk.org>
+%
+%  Licensed under the Apache License, Version 2.0 (the "License");
+%  you may not use this file except in compliance with the License.
+%  You may obtain a copy of the License at
+%
+%      http://www.apache.org/licenses/LICENSE-2.0
+%
+%  Unless required by applicable law or agreed to in writing, software
+%  distributed under the License is distributed on an "AS IS" BASIS,
+%  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%  See the License for the specific language governing permissions and
+%  limitations under the License.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+:- object(bunny,
+     implements(animal)).
+
+	:- info([
+		version is 0.1,
+		author is 'Anne Ogborn',
+		date is 2016/05/11,
+		comment is 'Cute bouncing bunny that lives in a field.'
+	]).
+
   :- use_module(library(gui_tracer), [gtrace/0]).
 
   :- uses(gensym, [reset_gensym/0, gensym/2]).
-:- uses(random, [random/1, random/3]).
-:- uses(list, [nth0/3]).
+  :- uses(random, [random/1, random/3]).
+  :- uses(list, [nth0/3]).
 
 	:- public(new/1).
 	:- mode(new(-object_identifier), one).
@@ -89,5 +117,9 @@
     write('Bunny '),
     write(Self),
     writeln(' dies').
+
+%%%%%%%%%%%%%%%%%%% animal protocol %%%%%%%%%%%%%%%%%%%%%%
+
+  species(bunny).
 
 :- end_object.
