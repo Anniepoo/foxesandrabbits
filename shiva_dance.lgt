@@ -3,7 +3,9 @@
 
   :-public(start/0).
 
-  start :- writeln('OK Shiva is dancing').
+  start :-
+    write('OK Shiva is dancing'),
+    nl.
 
   :- public(tick/0).
   tick :-

@@ -33,6 +33,8 @@
   :- uses(random, [random/1, random/3]).
   :- uses(list, [nth0/3]).
 
+%%%%%%%%%%%%%%%%%%%%%%%% interface %%%%%%%%%%%%%%%%%%%%%
+
 	:- public(new/1).
 	:- mode(new(-object_identifier), one).
 	:- info(new/1, [
@@ -40,15 +42,17 @@
 		argnames is ['Id']
 	]).
 
-   	:- public(live/0).
-   	:- info(live/0, [
-   		comment is 'Miss Bunny, do your thing for a cycle.'
-   	]).
+ 	:- public(live/0).
+ 	:- info(live/0, [
+ 		comment is 'Miss Bunny, do your thing for a cycle.'
+ 	]).
 
-   	:- public(die/0).
-   	:- info(die/0, [
-   		comment is 'Kill the wabbit!'
-   	]).
+ 	:- public(die/0).
+ 	:- info(die/0, [
+ 		comment is 'Kill the wabbit!'
+ 	]).
+
+%%%%%%%%%%%%%%%%%%%%%% bunny action %%%%%%%%%%%%%%%%%%%%%%%%%
 
 	new(Bunny) :-
 		self(Self),
@@ -64,7 +68,8 @@
     write('Bunny '),
     write(S),
     write(' has hunger '),
-    writeln(H),
+    write(H),
+    nl,
     ::retractall(hunger_(_)),
     NH is H + 1,
     ::asserta(hunger_(NH)),
@@ -76,12 +81,14 @@
     self(S),
     write('Bunny '),
     write(S),
-    writeln(' dies of hunger'),
+    write(' dies of hunger'),
+    nl,
     S::die.
   act :-
     self(S),
     field::sniff_fox(S, Dir),
-    writeln('Bunny hops away'),
+    write('Bunny hops away'),
+    nl,
     field::move_away_from(Dir, S).
   act :-
     ::hunger_(H),
@@ -89,7 +96,8 @@
     self(S),
     write('Bunny'),
     write(S),
-    writeln(' tries to eat'),
+    write(' tries to eat'),
+    nl,
     field::eat_grass(S, Food),
     ::hunger_(H),
     NewH is max(0, H - Food),
@@ -97,7 +105,7 @@
     write(NewH),
     retractall(hunger_(_)),
     asserta(hunger_(NewH)),
-    writeln('').
+    nl.
   act :-
     random(F),
     F > 0.5,
@@ -109,13 +117,15 @@
     self(Self),
     write('Bunny '),
     write(Self),
-    writeln(' Plays').
+    write(' Plays'),
+    nl.
 
   die :-
     self(Self),
     write('Bunny '),
     write(Self),
-    writeln(' dies').
+    write(' dies'),
+    nl.
 
 %%%%%%%%%%%%%%%%%%% animal protocol %%%%%%%%%%%%%%%%%%%%%%
 

@@ -6,4 +6,6 @@ xmlbackup/
 *.xsd
 *.pdf
 *.ent
+docs/
+*.dot
 

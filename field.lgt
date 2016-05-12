@@ -170,10 +170,12 @@
    %%%%%%%%%%%%%%%%%%%%%%%%%  Respond to events %%%%%%%%%%%%%%%%%%%%%
 
    after(Animal, die, _) :-
-     writeln('in die handler'),
+     write('in die handler'),
+     nl,
      animal_(Animal, _, _),
      write(Animal),
-     writeln(' died'),
+     write(' died'),
+     nl,
      retractall(animal_(Animal, _, _)).
    after(Object, Message, Sender) :-
      write('hey strange message: '),
@@ -181,7 +183,8 @@
      write(' --> '),
      write(Message),
      write(' --> '),
-     writeln(Object).
+     write(Object),
+     nl.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%% Environment sensing %%%%%%%%%%%%%%%%%%
 
@@ -240,14 +243,13 @@
     retractall(animal_(Name, _, _)),
     asserta(animal_(Name, X, NY)).
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  display field %%%%%%%%%%%%%%%%%%%%%
 
   print_field :-
     field_size(S),
     between(0,S,Y),
     print_row(Y),
-    writeln(''),
+    nl,
     fail.
   print_field.
 

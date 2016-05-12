@@ -17,7 +17,7 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-:- initialization((
+:- initialization(( 
 	write('loading it all up'),
 	nl,
 	set_logtalk_flag(events, allow),

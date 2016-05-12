@@ -30,13 +30,15 @@
       self(Self),
       write('Fox '),
       write(Self),
-      writeln(' lives').
+      write(' lives'),
+      nl.
 
     die :-
       self(Self),
       write('Fox '),
       write(Self),
-      writeln(' dies').
+      write(' dies'),
+      nl.
 
   %%%%%%%%%%%%%%%%%%% animal protocol %%%%%%%%%%%%%%%%%%%%%%
 
