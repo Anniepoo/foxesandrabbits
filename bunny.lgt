@@ -27,7 +27,7 @@
 		comment is 'Cute bouncing bunny that lives in a field.'
 	]).
 
-  :- use_module(library(gui_tracer), [gtrace/0]).
+  :- use_module(gui_tracer, [gtrace/0]).
 
   :- uses(gensym, [reset_gensym/0, gensym/2]).
   :- uses(random, [random/1, random/3]).

@@ -28,8 +28,10 @@
 		library(list),
 		library(gensym),
 		library(random_loader),
+		library(integer),
 		animal,
 		shiva_dance,
 		fox,
 		bunny,
-		field]))).
+		field]),
+	lgtdoc::directory('.'))).

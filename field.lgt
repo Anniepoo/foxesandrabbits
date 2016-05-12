@@ -23,6 +23,7 @@
 :- object(field,
    implements(monitoring)).
 :- uses(random, [random/3]).
+:- uses(integer, [ between/3]).
 
    :- info([
        version is 0.1,
@@ -62,24 +63,21 @@
     :- public(eat_grass/2).
     :- mode(eat_grass(+object_identifier, -number), zero_or_one).
     :- info(eat_grass/2, [
-      comment is 'true if Name is a bunny ID and Food is an amount of food eaten.\c
-       Side effect of decreasing available grass. Bunny takes care of impact on its own hunger level. Fails if cant eat here',
+      comment is 'true if Name is a bunny ID and Food is an amount of food eaten. Side effect of decreasing available grass. Bunny takes care of impact on its own hunger level. Fails if cant eat here',
       argnames is ['Name', 'Food']
     ]).
 
     :- public(move_away_from/2).
     :- mode(move_away_from(+object_identifier, +atom), zero_or_one).
     :- info(move_away_from/2, [
-      comment is 'true if Name is an animal ID and Direction is a direction away from which the animal can and does\c
-       move. Side effect, the animal moves. fails if impossible',
+      comment is 'true if Name is an animal ID and Direction is a direction away from which the animal can and does move. Side effect, the animal moves. fails if impossible',
       argnames is ['Direction', 'Name']
     ]).
 
     :- public(move/2).
     :- mode(move(+object_identifier, +atom), zero_or_one).
     :- info(move_away_from/2, [
-      comment is 'true if Name is an animal ID and Direction is a direction towards which the animal can and does\c
-       move. Side effect, the animal moves. fails if impssible ',
+      comment is 'true if Name is an animal ID and Direction is a direction towards which the animal can and does move. Side effect, the animal moves. fails if impssible ',
       argnames is ['Direction', 'Name']
     ]).
 
