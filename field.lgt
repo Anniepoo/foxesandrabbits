@@ -220,28 +220,28 @@
     animal_(Name, X, Y),
     X > 0,
     NX is X - 1,
-    ::retractall(animal_(Name, _, _)),
-    ::asserta(animal_(Name, NX, Y)).
+    retractall(animal_(Name, _, _)),
+    asserta(animal_(Name, NX, Y)).
   move(right, Name) :-
     animal_(Name, X, Y),
     field_size(N),
     X < N,
     NX is X + 1,
-    ::retractall(animal_(Name, _, _)),
-    ::asserta(animal_(Name, NX, Y)).
+    retractall(animal_(Name, _, _)),
+    asserta(animal_(Name, NX, Y)).
   move(up, Name) :-
     animal_(Name, X, Y),
     Y > 0,
     NY is Y - 1,
-    ::retractall(animal_(Name, _, _)),
-    ::asserta(animal_(Name, X, NY)).
+    retractall(animal_(Name, _, _)),
+    asserta(animal_(Name, X, NY)).
   move(down, Name) :-
     animal_(Name, X, Y),
     field_size(N),
     Y < N,
     NY is Y + 1,
-    ::retractall(animal_(Name, _, _)),
-    ::asserta(animal_(Name, X, NY)).
+    retractall(animal_(Name, _, _)),
+    asserta(animal_(Name, X, NY)).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  display field %%%%%%%%%%%%%%%%%%%%%
@@ -323,10 +323,10 @@
     wabbit(Bunny, X, Y),
     grass_(X, Y, Avail),
     Avail > 2,
-    ::retractall(grass_(X, Y, _)),
+    retractall(grass_(X, Y, _)),
     % rabbit eats half the grass but never more than 6
     Nutrition is max(6, Avail // 2),
     NA is max(0, Avail - Nutrition),
-    ::asserta(grass_(X, Y, NA)).
+    asserta(grass_(X, Y, NA)).
 
 :- end_object.
