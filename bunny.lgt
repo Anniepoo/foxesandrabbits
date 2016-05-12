@@ -59,7 +59,6 @@
   :- dynamic(hunger_/1).
 
   live :-
-  % why arent bunnies getting hungry?
     ::hunger_(H),
     self(S),
     write('Bunny '),
