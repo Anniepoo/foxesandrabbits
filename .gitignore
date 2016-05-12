@@ -1,2 +1,9 @@
 *.*~
 xml_docs/
+xmlbackup/
+*.css
+*.dtd
+*.xsd
+*.pdf
+*.ent
+
