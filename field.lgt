@@ -24,8 +24,6 @@
    implements(monitoring)).
 :- uses(random, [random/3]).
 
-:- set_logtalk_flag(events, allow).
-
    :- info([
        version is 0.1,
        date is 2016/05/09,
@@ -174,6 +172,7 @@
    %%%%%%%%%%%%%%%%%%%%%%%%%  Respond to events %%%%%%%%%%%%%%%%%%%%%
 
    after(Animal, die, _) :-
+     writeln('in die handler'),
      animal_(Animal, _, _),
      write(Animal),
      writeln(' died'),

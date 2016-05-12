@@ -21,6 +21,7 @@
 
 init :-
 	writeln('loading it all up'),
+	set_logtalk_flag(events, allow),
 	logtalk_load([
 		relations(loader),
 		library(list),

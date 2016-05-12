@@ -78,7 +78,7 @@
     write('Bunny '),
     write(S),
     writeln(' dies of hunger'),
-    ::die.
+    S::die.
   act :-
     self(S),
     field::sniff_fox(S, Dir),
