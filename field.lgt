@@ -90,8 +90,18 @@
       comment is 'reset the world to a new start state'
     ]).
 
-   :- private([wabbit_/3, fox_/3, grass_/3]).
-   :- dynamic([wabbit_/3,fox_/3,grass_/3]).
+   :- private([animal_/3, grass_/3]).
+   :- dynamic([animal_/3,grass_/3]).
+
+   %%%%%%%%%%%%%%%%%%%%% animal utilities %%%%%%%%%%%%%%%%%%%
+
+   wabbit(Name, X, Y) :-
+     animal_(Name, X, Y),
+     Name::species(bunny).
+
+   fox(Name, X, Y) :-
+     animal_(Name, X, Y),
+     Name::species(fox).
 
 %%%%%%%%%%%%%%%%%%%%%%%%% init related %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -99,10 +109,8 @@
      self(Self),
     abolish_events(after, _, die, _, Self),
      reset_grass,
-     forall(wabbit_(Name, _, _), Name::die),
-     forall(fox_(Name, _, _), Name::die),
-     retractall(wabbit_(_,_,_)),
-     retractall(fox_(_,_,_)),
+     forall(animal_(Name, _, _), Name::die),
+     retractall(animal_(_,_,_)),
      bestrew_wabbits,
      bestrew_foxes,
      % only now do we listen for events
@@ -130,14 +138,14 @@
        random(0, S, X),
        random(0, S, Y),
        bunny::new(Name),
-       asserta(wabbit_(Name, X, Y)).
+       asserta(animal_(Name, X, Y)).
 
    add_a_fox :-
       field_size(S),
        random(0, S, X),
        random(0, S, Y),
        fox::new(Name),
-       asserta(fox_(Name, X, Y)).
+       asserta(animal_(Name, X, Y)).
 
 %%%%%%%%%%%%%%%%%%%%%%% convenience mapping operators %%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -150,13 +158,15 @@
    map_field(_).
 
    with_foxes(Goal) :-
-     fox_(ID, _, _),
+     animal_(ID, _, _),
+     ID::species(fox),
      once(ID::Goal),
      fail.
    with_foxes(_).
 
    with_bunnies(Goal) :-
-     wabbit_(ID, _, _),
+     animal_(ID, _, _),
+     ID::species(bunny),
      once(ID::Goal),
      fail.
    with_bunnies(_).
@@ -164,17 +174,10 @@
    %%%%%%%%%%%%%%%%%%%%%%%%%  Respond to events %%%%%%%%%%%%%%%%%%%%%
 
    after(Animal, die, _) :-
-     fox_(Animal, _, _),
-     write('Fox named'),
+     animal_(Animal, _, _),
      write(Animal),
      writeln(' died'),
-     retractall(fox_(Animal, _, _)).
-   after(Animal, die, _) :-
-     wabbit_(Animal, _, _),
-     write('Bunny named'),
-     write(Animal),
-     writeln(' died'),
-     retractall(wabbit_(Animal, _, _)).
+     retractall(animal_(Animal, _, _)).
    after(Object, Message, Sender) :-
      write('hey strange message: '),
      write(Sender),
@@ -186,21 +189,21 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%% Environment sensing %%%%%%%%%%%%%%%%%%
 
   sniff_fox(Bunny, left) :-
-    wabbit_(Bunny, X, Y),
+    wabbit(Bunny, X, Y),
     FX is X - 1,
-    fox_(_, FX, Y).
+    fox(_, FX, Y).
   sniff_fox(Bunny, right) :-
-    wabbit_(Bunny, X, Y),
+    wabbit(Bunny, X, Y),
     FX is X + 1,
-    fox_(_, FX, Y).
+    fox(_, FX, Y).
   sniff_fox(Bunny, up) :-
-    wabbit_(Bunny, X, Y),
+    wabbit(Bunny, X, Y),
     FY is Y - 1,
-    fox_(_, X, FY).
+    fox(_, X, FY).
   sniff_fox(Bunny, down) :-
-    wabbit_(Bunny, X, Y),
+    wabbit(Bunny, X, Y),
     FY is Y + 1,
-    fox_(_, X, FY).
+    fox(_, X, FY).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Act on environment %%%%%%%%%%%%%%%%
   move_away_from(left, Name) :-
@@ -214,31 +217,31 @@
 
 % TODO need to refactor into a base class of animal.
   move(left, Name) :-
-    wabbit_(Name, X, Y),
+    animal_(Name, X, Y),
     X > 0,
     NX is X - 1,
-    ::retractall(wabbit_(Name, _, _)),
-    ::asserta(wabbit_(Name, NX, Y)).
+    ::retractall(animal_(Name, _, _)),
+    ::asserta(animal_(Name, NX, Y)).
   move(right, Name) :-
-    wabbit_(Name, X, Y),
+    animal_(Name, X, Y),
     field_size(N),
     X < N,
     NX is X + 1,
-    ::retractall(wabbit_(Name, _, _)),
-    ::asserta(wabbit_(Name, NX, Y)).
+    ::retractall(animal_(Name, _, _)),
+    ::asserta(animal_(Name, NX, Y)).
   move(up, Name) :-
-    wabbit_(Name, X, Y),
+    animal_(Name, X, Y),
     Y > 0,
     NY is Y - 1,
-    ::retractall(wabbit_(Name, _, _)),
-    ::asserta(wabbit_(Name, X, NY)).
+    ::retractall(animal_(Name, _, _)),
+    ::asserta(animal_(Name, X, NY)).
   move(down, Name) :-
-    wabbit_(Name, X, Y),
+    animal_(Name, X, Y),
     field_size(N),
     Y < N,
     NY is Y + 1,
-    ::retractall(wabbit_(Name, _, _)),
-    ::asserta(wabbit_(Name, X, NY)).
+    ::retractall(animal_(Name, _, _)),
+    ::asserta(animal_(Name, X, NY)).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  display field %%%%%%%%%%%%%%%%%%%%%
@@ -260,14 +263,14 @@
 
   print_cell(X, Y) :- print_cell_(X, Y), !.
   print_cell_(X, Y) :-
-    fox_(_, X,Y),
-    wabbit_(_, X, Y),
+    fox(_, X,Y),
+    wabbit(_, X, Y),
     write('@#$! ').
     print_cell_(X, Y) :-
-      fox_(_, X,Y),
+      fox(_, X,Y),
       write(' ^.^ ').
     print_cell_(X, Y) :-
-      wabbit_(_, X,Y),
+      wabbit(_, X,Y),
       write('>:c. ').
     print_cell_(X, Y) :-
       grass_(X,Y, Height),
@@ -317,7 +320,7 @@
   % message that a bunny is eating grass. We modify the grass value but the
   % bunny takes care of it's self
   eat_grass(Bunny, Nutrition) :-
-    wabbit_(Bunny, X, Y),
+    wabbit(Bunny, X, Y),
     grass_(X, Y, Avail),
     Avail > 2,
     ::retractall(grass_(X, Y, _)),
