@@ -17,12 +17,13 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-:- initialization(init).
-
-init :-
-	writeln('loading it all up'),
+:- initialization((
+	write('loading it all up'),
+	nl,
 	set_logtalk_flag(events, allow),
+	set_logtalk_flag(source_data, on),
 	logtalk_load([
+	  lgtdoc(loader),
 		relations(loader),
 		library(list),
 		library(gensym),
@@ -31,4 +32,4 @@ init :-
 		shiva_dance,
 		fox,
 		bunny,
-		field]).
+		field]))).
