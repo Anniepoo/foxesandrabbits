@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 %  This file is part of Logtalk <http://logtalk.org/>
-%  Copyright 1998-2016 Paulo Moura <pmoura@logtalk.org>
+%  Copyright 1S8-2016 Paulo Moura <pmoura@logtalk.org>
 %
 %  Licensed under the Apache License, Version 2.0 (the "License");
 %  you may not use this file except in compliance with the License.
@@ -17,23 +17,26 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-:- initialization((
-	write('loading it all up'),
-	nl,
-	set_logtalk_flag(events, allow),
-	set_logtalk_flag(source_data, on),
-	logtalk_load([
-	  lgtdoc(loader),
-		diagrams(loader),
-		relations(loader),
-		library(list),
-		library(gensym),
-		library(random_loader),
-		library(integer),
-		animal,
-		shiva_dance,
-		fox,
-		bunny,
-		field,
-		diagrammaker]),
-	lgtdoc::directory('.'))).
+% tool to make diagrams
+
+:- object(diagrammaker).
+:- uses(entity_diagram, [directory/2] ).
+
+   :- info([
+       version is 0.1,
+       date is 2016/05/11,
+       author is 'Anne Ogborn',
+       comment is 'tool that makes the diagrams for foxes and rabbits'
+   ]).
+
+   :- public(make_diagrams/0).
+
+   make_diagrams :-
+     Options = [
+     url_prefixes('https://github.com/Anniepoo/foxesandrabbits/blob/master/',
+     'http://partyserver.rocks/foxesandrabbits/'),
+      title('Foxes and Rabbits'),
+      output_directory('./docs/dot/')
+     ],
+     diagrams::directory('foxesandrabbits', '.', Options).
+:- end_object.
