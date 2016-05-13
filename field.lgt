@@ -145,6 +145,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%% convenience mapping operators %%%%%%%%%%%%%%%%%%%%%%%%%
 
+:- meta_predicate(map_field(2)).
    map_field(Goal) :-
      field_size(S),
      between(0,S,X),
@@ -153,6 +154,8 @@
      fail.
    map_field(_).
 
+ :- meta_predicate(with_foxes(0)).
+
    with_foxes(Goal) :-
      animal_(ID, _, _),
      ID::species(fox),
@@ -160,6 +163,7 @@
      fail.
    with_foxes(_).
 
+ :- meta_predicate(with_bunnies(0)).
    with_bunnies(Goal) :-
      animal_(ID, _, _),
      ID::species(bunny),
