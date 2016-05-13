@@ -29,3 +29,4 @@ makediagrams:
 	cd ./docs/dot && dot -Tsvg foxesandrabbits_uses_diagram.dot >foxesandrabbits_uses_diagram.svg
 	cd ./docs/dot && dot -Tsvg foxesandrabbits_file_dependency_diagram.dot >foxesandrabbits_file_dependency_diagram.svg
 	cd ./docs/dot && dot -Tsvg foxesandrabbits_xref_diagram.dot >foxesandrabbits_xref_diagram.svg
+	cd ./docs/dot && dot -Tsvg field_object_xref_diagram.dot >field_object_xref_diagram.svg

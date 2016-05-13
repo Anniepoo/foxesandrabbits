@@ -34,8 +34,6 @@
 
    make_diagrams :-
      working_directory(Dir),
-     write('$$$$$$$$$$$$$$$$$$$$'),
-     write(Dir),nl,
      Options = [
      url_prefixes('https://github.com/Anniepoo/foxesandrabbits/blob/master/',
      'http://partyserver.rocks/foxesandrabbits/'),
@@ -43,5 +41,7 @@
       output_directory('./docs/dot/'),
       omit_path_prefixes([Dir])
      ],
-     diagrams::directory('foxesandrabbits', '.', Options).
+     diagrams::directory('foxesandrabbits', '.', Options),
+     xref_diagram::entity(field, Options). % TODO give this its own options
+
 :- end_object.

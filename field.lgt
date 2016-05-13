@@ -103,7 +103,7 @@
 
    init :-
      self(Self),
-    abolish_events(after, _, die, _, Self),
+     abolish_events(after, _, die, _, Self),
      reset_grass,
      forall(animal_(Name, _, _), Name::die),
      retractall(animal_(_,_,_)),
@@ -154,8 +154,7 @@
      fail.
    map_field(_).
 
- :- meta_predicate(with_foxes(0)).
-
+ :- meta_predicate(with_foxes(::)).
    with_foxes(Goal) :-
      animal_(ID, _, _),
      ID::species(fox),
@@ -163,7 +162,7 @@
      fail.
    with_foxes(_).
 
- :- meta_predicate(with_bunnies(0)).
+ :- meta_predicate(with_bunnies(::)).
    with_bunnies(Goal) :-
      animal_(ID, _, _),
      ID::species(bunny),
