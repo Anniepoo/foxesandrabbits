@@ -20,7 +20,8 @@
 % tool to make diagrams
 
 :- object(diagrammaker).
-:- uses(entity_diagram, [directory/2] ).
+  :- uses(entity_diagram, [directory/2] ).
+  :- uses(os, [expand_path/2, decompose_file_name/4, working_directory/1]).
 
    :- info([
        version is 0.1,
@@ -32,11 +33,15 @@
    :- public(make_diagrams/0).
 
    make_diagrams :-
+     working_directory(Dir),
+     write('$$$$$$$$$$$$$$$$$$$$'),
+     write(Dir),nl,
      Options = [
      url_prefixes('https://github.com/Anniepoo/foxesandrabbits/blob/master/',
      'http://partyserver.rocks/foxesandrabbits/'),
       title('Foxes and Rabbits'),
-      output_directory('./docs/dot/')
+      output_directory('./docs/dot/'),
+      omit_path_prefixes([Dir])
      ],
      diagrams::directory('foxesandrabbits', '.', Options).
 :- end_object.

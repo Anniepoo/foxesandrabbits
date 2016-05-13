@@ -70,7 +70,7 @@ Bunny o231 Plays
 false.
 
 Notice this is a bug - the bunnies aren't getting hungry.
-Obviously some simple misunderstanding of Logtalk, as the code on line 29 of bunny.lgt is pretty clear
+(since fixed)
 
 [debug]  ?- field::print_field.
 WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW WWWW
