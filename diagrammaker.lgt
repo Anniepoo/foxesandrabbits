@@ -33,15 +33,17 @@
    :- public(make_diagrams/0).
 
    make_diagrams :-
-     working_directory(Dir),
-     Options = [
-     url_prefixes('https://github.com/Anniepoo/foxesandrabbits/blob/master/',
-     'http://partyserver.rocks/foxesandrabbits/'),
-      title('Foxes and Rabbits'),
-      output_directory('./docs/dot/'),
-      omit_path_prefixes([Dir])
-     ],
-     diagrams::directory('foxesandrabbits', '.', Options),
-     xref_diagram::entity(field, Options). % TODO give this its own options
+       working_directory(Dir),
+       Options = [
+       node_type_captions(true),
+        path_url_prefixes(Dir, 'https://github.com/Anniepoo/foxesandrabbits/tree/master/', 'http://partyserver.rocks/foxesandrabbits/'),
+        path_url_prefixes('$LOGTALKUSER', 'https://github.com/LogtalkDotOrg/logtalk3/tree/master/', 'http://logtalk.org/library/'),
+        path_url_prefixes('$LOGTALKHOME', 'https://github.com/LogtalkDotOrg/logtalk3/tree/master/', 'http://logtalk.org/library/'),
+        title('Foxes and Rabbits'),
+        output_directory('./docs/dot/')
+   %      omit_path_prefixes([Dir])
+       ],
+       diagrams::directory('foxesandrabbits', '.', Options),
+       xref_diagram::entity(field, Options). % TODO give this its own options
 
 :- end_object.
